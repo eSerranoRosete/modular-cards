@@ -1,0 +1,16 @@
+{
+  "id": "mig_cjr5jdlk5jd2mmishe90",
+  "parentID": "mig_cjr5jbkjnjqbai9aotug",
+  "checksum": "1:12d3929acfb32364d1196f17054b83ed5a34f9c4d3c155f9410e613834d18f43",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "organization",
+          "type": "string"
+        },
+        "table": "cards"
+      }
+    }
+  ]
+}

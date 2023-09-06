@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://eSerranoRosete-s-workspace-uvo60q.us-east-1.xata.sh/db/xata-nextjs",
+  "codegen": {
+    "output": "xata.ts"
+  }
+}

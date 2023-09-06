@@ -1,0 +1,19 @@
+{
+  "id": "mig_cjr6fasjnjqbai9ap2u0",
+  "parentID": "mig_cjr68atk5jd2mmishfm0",
+  "checksum": "1:18444dc90ced379feb607ec4f289e087e963029b3120840163d09eae5b258290",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "user",
+          "type": "link",
+          "link": {
+            "table": "users"
+          }
+        },
+        "table": "cards"
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "mig_cjr9cg0ioeqbsfnaakfg",
+  "parentID": "mig_cjr9ccdk5jd2mmishrvg",
+  "checksum": "1:3c433f0eb7e33fe174f9ea15e413148fcbd2d6d24fb2cd3332737e93c1e23465",
+  "operations": [
+    {
+      "renameColumn": {
+        "newName": "description",
+        "oldName": "displayTitle",
+        "table": "cards"
+      }
+    }
+  ]
+}

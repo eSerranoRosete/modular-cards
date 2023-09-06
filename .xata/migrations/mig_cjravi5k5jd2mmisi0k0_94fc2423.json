@@ -1,0 +1,16 @@
+{
+  "id": "mig_cjravi5k5jd2mmisi0k0",
+  "parentID": "mig_cjr9cg0ioeqbsfnaakfg",
+  "checksum": "1:94fc24237d3d35cefff8bb8b4fb00ca836140e01b799e2f57889ee56c87cf3dd",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "avatar",
+          "type": "file"
+        },
+        "table": "cards"
+      }
+    }
+  ]
+}

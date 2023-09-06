@@ -1,0 +1,16 @@
+{
+  "id": "mig_cjqmfdpvl9d3uhvuuojg",
+  "parentID": "mig_cjqm6i928jvdligtkhng",
+  "checksum": "1:14385f229a2fc631093b377781da46c3865a0d1c0d98eadc306d5e75a9b7563c",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "avatar",
+          "type": "file"
+        },
+        "table": "Posts"
+      }
+    }
+  ]
+}
