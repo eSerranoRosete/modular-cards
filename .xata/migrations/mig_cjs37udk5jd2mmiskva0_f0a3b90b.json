@@ -1,0 +1,16 @@
+{
+  "id": "mig_cjs37udk5jd2mmiskva0",
+  "parentID": "mig_cjrq29gioeqbsfnacta0",
+  "checksum": "1:f0a3b90bb61593a26c058284e02c1fa7d7cf1dc9c7c4e309d369361853274bd6",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "email",
+          "type": "email"
+        },
+        "table": "cards"
+      }
+    }
+  ]
+}

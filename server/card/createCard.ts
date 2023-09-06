@@ -5,17 +5,16 @@ import { Cards, getXataClient } from "@/xata";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
-interface CreateCardPayload extends Omit<Cards, "user" | "id"> {
+interface CreateCardPayload
+  extends Omit<Cards, "user" | "id" | "avatar" | "cover"> {
   base64Avatar?: string;
   base64Cover?: string;
 }
 
 export const createCard = async ({
-  title,
-  description,
-  organization,
   base64Avatar,
   base64Cover,
+  ...values
 }: CreateCardPayload) => {
   const session = await getServerSession(options);
 
@@ -31,9 +30,7 @@ export const createCard = async ({
   const cover = base64Cover?.split(",")[1];
 
   const card = await xata.db.cards.create({
-    title,
-    description,
-    organization,
+    ...values,
     user: { id },
     ...(base64Avatar && {
       avatar: {
@@ -51,5 +48,5 @@ export const createCard = async ({
 
   revalidatePath("/*");
 
-  return card;
+  return card.id;
 };

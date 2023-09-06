@@ -24,6 +24,8 @@ const tables = [
       { name: "user", type: "link", link: { table: "users" } },
       { name: "avatar", type: "file" },
       { name: "cover", type: "file" },
+      { name: "email", type: "email" },
+      { name: "phone", type: "string" },
     ],
   },
 ] as const;

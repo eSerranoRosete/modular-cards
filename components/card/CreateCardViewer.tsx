@@ -25,9 +25,8 @@ import { useRouter } from "next/navigation";
 import { useStore } from "zustand";
 import { CardContext } from "@/context/card/useCardStore";
 import { CardTemplate } from "./CardTemplate";
-import { BasicDetailsForm } from "./BasicDetailsForm";
 
-export const CardFormViewer = () => {
+export const CreateCardViewer = () => {
   const store = useContext(CardContext);
 
   if (!store) throw new Error("Missing CardContext.Provider in the tree");
@@ -91,7 +90,71 @@ export const CardFormViewer = () => {
         </div>
       </div>
       <section className="mt-10 flex items-start">
-        <BasicDetailsForm form={form} onSubmit={onSubmit} />
+        <Form {...form}>
+          <form
+            className="w-full max-w-md grid gap-3"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <div>
+              <h5 className="text-xl font-semibold">Basic Details</h5>
+              <p className="text-sm mb-5 text-muted-foreground">
+                Fill in the basic details for your card
+              </p>
+            </div>
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display Title</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display Subtitle</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="organization"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Organization</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <div className="mt-5 flex space-x-2 justify-end">
+              <Link
+                className={buttonVariants({ variant: "ghost" })}
+                href="/studio"
+              >
+                Cancel
+              </Link>
+              <AppButton
+                disabled={form.formState.isSubmitting}
+                isLoading={form.formState.isSubmitting}
+                iconStart={<Save className="w-4" />}
+              >
+                Save
+              </AppButton>
+            </div>
+          </form>
+        </Form>
         <CardTemplate />
       </section>
     </main>

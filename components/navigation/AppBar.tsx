@@ -37,7 +37,7 @@ export const AppBar = () => {
       <nav className="container py-2 flex items-center">
         <Link href="/dashboard">
           <h1 className="flex items-center space-x-2">
-            <div className="w-5 h-5 bg-black rounded-full" />
+            <div className="w-5 h-5 bg-foreground rounded-full" />
             <span className="font-semibold">Inteminer</span>
           </h1>
         </Link>

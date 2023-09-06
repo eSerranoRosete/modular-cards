@@ -5,18 +5,15 @@ import { Cards, getXataClient } from "@/xata";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
-interface UpdateCardPayload extends Omit<Cards, "user"> {
+interface UpdateCardPayload extends Omit<Cards, "user" | "avatar" | "cover"> {
   base64Avatar?: string;
   base64Cover?: string;
 }
 
 export const updateCard = async ({
-  title,
-  description,
-  organization,
-  id,
   base64Avatar,
   base64Cover,
+  ...values
 }: UpdateCardPayload) => {
   const session = await getServerSession(options);
 
@@ -28,7 +25,7 @@ export const updateCard = async ({
 
   const xata = getXataClient();
 
-  const currentCard = await xata.db.cards.filter({ id }).getFirst();
+  const currentCard = await xata.db.cards.filter({ id: values.id }).getFirst();
 
   if (!currentCard?.user) {
     throw new Error("Card not found");
@@ -41,10 +38,8 @@ export const updateCard = async ({
   const avatar = base64Avatar?.split("data:image/png;base64,")[1];
   const cover = base64Cover?.split("data:image/png;base64,")[1];
 
-  const card = await xata.db.cards.update(id, {
-    title,
-    description,
-    organization,
+  const card = await xata.db.cards.update(values.id, {
+    ...values,
     ...(base64Avatar && {
       avatar: {
         base64Content: avatar,

@@ -1,4 +1,6 @@
+import { NoCardsBanner } from "@/components/feedback/NoCardsBanner";
 import { AppButton } from "@/components/ui/app-button";
+import { buttonVariants } from "@/components/ui/button";
 
 import {
   Card,
@@ -6,19 +8,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { getUserCards } from "@/server/card/getUserCards";
 
-import { PlusCircle } from "lucide-react";
+import { ExternalLink, PlusCircle } from "lucide-react";
 import Link from "next/link";
 
 export default async function StudioPage() {
   const userCards = await getUserCards();
 
+  const hasCards = userCards && userCards.length > 0;
+
   return (
     <main>
       <div className="flex mt-5 items-center">
         <div className="grow flex space-x-2 items-baseline">
-          <h1 className="text-3xl font-medium">Studio</h1>
+          <Link href="/studio">
+            <h1 className="text-2xl flex gap-2 font-medium">
+              <span>Studio</span>
+            </h1>
+          </Link>
         </div>
         <Link href="/studio/create">
           <AppButton size="sm" iconStart={<PlusCircle className="w-4" />}>
@@ -27,9 +36,10 @@ export default async function StudioPage() {
         </Link>
       </div>
       <section className="mt-10 ">
+        {!hasCards && <NoCardsBanner />}
         <div className="grid gap-4 grid-cols-4">
           {userCards?.map((card: any) => (
-            <Link href={`/studio/edit/${card.id}`}>
+            <Link href={`/studio/edit/${card.id}`} className="group/card">
               <Card className="overflow-clip w-full h-full">
                 <div className="w-full h-32 bg-black relative">
                   <img

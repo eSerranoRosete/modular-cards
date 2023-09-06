@@ -1,9 +1,7 @@
-"use client";
-
 import { CardEditor } from "@/components/editor/CardEditor";
 import { CardProvider } from "@/context/card/CardProvider";
 
-export default function StudioCreatePage() {
+export default function EditorPage() {
   return (
     <CardProvider>
       <CardEditor />
