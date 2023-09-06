@@ -15,7 +15,9 @@ export const getUserCards = async () => {
 
   const xata = getXataClient();
 
-  const cards = await xata.db.cards.filter("user.id", id).getMany();
+  const cards = (
+    await xata.db.card.filter("user.id", id).getMany()
+  ).toSerializable();
 
   return cards;
 };

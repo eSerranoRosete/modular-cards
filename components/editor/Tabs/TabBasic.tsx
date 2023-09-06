@@ -34,9 +34,9 @@ export const TabBasic = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: ctx.title || "",
-      description: ctx.description || "",
-      organization: ctx.organization || "",
+      title: ctx.title as string,
+      description: ctx.description as string,
+      organization: ctx.organization as string,
     },
   });
 

@@ -1,20 +1,18 @@
 "use server";
 
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import { Cards, getXataClient } from "@/xata";
+import { getXataClient } from "@/xata";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
-interface UpdateCardPayload extends Omit<Cards, "user" | "avatar" | "cover"> {
-  base64Avatar?: string;
-  base64Cover?: string;
-}
+import { CardStoreProps } from "@/context/card/useCardStore";
 
-export const updateCard = async ({
-  base64Avatar,
-  base64Cover,
-  ...values
-}: UpdateCardPayload) => {
+// interface UpdateCardPayload extends Omit<Card, "user" | "avatar" | "cover"> {
+//   base64Avatar?: string;
+//   base64Cover?: string;
+// }
+
+export const updateCard = async (values: CardStoreProps) => {
   const session = await getServerSession(options);
 
   if (!session?.user) {
@@ -25,7 +23,7 @@ export const updateCard = async ({
 
   const xata = getXataClient();
 
-  const currentCard = await xata.db.cards.filter({ id: values.id }).getFirst();
+  const currentCard = await xata.db.card.filter({ id: values.id }).getFirst();
 
   if (!currentCard?.user) {
     throw new Error("Card not found");
@@ -35,18 +33,18 @@ export const updateCard = async ({
     throw new Error("You don't have permission to update this card");
   }
 
-  const avatar = base64Avatar?.split("data:image/png;base64,")[1];
-  const cover = base64Cover?.split("data:image/png;base64,")[1];
+  const avatar = values.avatar?.split("data:image/png;base64,")[1];
+  const cover = values.cover?.split("data:image/png;base64,")[1];
 
-  const card = await xata.db.cards.update(values.id, {
+  const card = await xata.db.card.update(currentCard.id, {
     ...values,
-    ...(base64Avatar && {
+    ...(avatar && {
       avatar: {
         base64Content: avatar,
         mediaType: "image/jpg",
       },
     }),
-    ...(base64Cover && {
+    ...(cover && {
       cover: {
         base64Content: cover,
         mediaType: "image/jpg",
@@ -56,5 +54,5 @@ export const updateCard = async ({
 
   revalidatePath("/*");
 
-  return card;
+  return card?.id;
 };

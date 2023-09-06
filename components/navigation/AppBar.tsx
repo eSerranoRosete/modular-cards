@@ -4,19 +4,10 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "../ui/avatar";
-import { User, Wallet } from "lucide-react";
-import { SignOut } from "../SignOut";
 import { Separator } from "../ui/separator";
 import { usePathname } from "next/navigation";
+import { ProfileMenu } from "../ProfileMenu";
+import { SessionProvider } from "next-auth/react";
 
 const navItems = [
   {
@@ -37,7 +28,22 @@ export const AppBar = () => {
       <nav className="container py-2 flex items-center">
         <Link href="/dashboard">
           <h1 className="flex items-center space-x-2">
-            <div className="w-5 h-5 bg-foreground rounded-full" />
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 30 30"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-foreground w-6"
+            >
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M0.857422 26.3135C0.0761719 27.0947 0.0761719 28.3604 0.857422 29.1416C1.63867 29.9229 2.90527 29.9229 3.68555 29.1416L8.0459 24.7812C10.0078 26.1787 12.4082 27 15 27C21.627 27 27 21.627 27 15C27 12.4082 26.1787 10.0078 24.7812 8.0459L29.1416 3.68555C29.9229 2.90527 29.9229 1.63867 29.1416 0.857422C28.3604 0.0761719 27.0947 0.0761719 26.3135 0.857422L21.9521 5.21875C19.9902 3.82227 17.5918 3 15 3C8.37305 3 3 8.37305 3 15C3 17.5918 3.82227 19.9902 5.21875 21.9521L0.857422 26.3135Z"
+                fill="currentColor"
+              />
+            </svg>
+
             <span className="font-semibold">Inteminer</span>
           </h1>
         </Link>
@@ -51,29 +57,10 @@ export const AppBar = () => {
             />
           ))}
         </div>
-        <div>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Avatar>
-                <AvatarFallback>ES</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <User className="w-4 mr-2" />
-                Your Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Wallet className="w-4 mr-2" />
-                Manage Subscription
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <SignOut />
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+
+        <SessionProvider>
+          <ProfileMenu />
+        </SessionProvider>
       </nav>
       <Separator />
     </div>
@@ -95,7 +82,7 @@ export const NavItem = ({ isActive, label, path }: NavItemProps) => {
           size: "sm",
           variant: "ghost",
         }),
-        isActive && "bg-black text-white hover:bg-black hover:text-white",
+        isActive && "bg-primary text-white hover:bg-primary hover:text-white",
         "transition-none"
       )}
     >

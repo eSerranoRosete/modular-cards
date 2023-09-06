@@ -1,6 +1,5 @@
 import { NoCardsBanner } from "@/components/feedback/NoCardsBanner";
 import { AppButton } from "@/components/ui/app-button";
-import { buttonVariants } from "@/components/ui/button";
 
 import {
   Card,
@@ -8,16 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import { getUserCards } from "@/server/card/getUserCards";
 
-import { ExternalLink, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 
 export default async function StudioPage() {
   const userCards = await getUserCards();
 
-  const hasCards = userCards && userCards.length > 0;
+  const hasCard = userCards && userCards.length > 0;
 
   return (
     <main>
@@ -36,7 +34,7 @@ export default async function StudioPage() {
         </Link>
       </div>
       <section className="mt-10 ">
-        {!hasCards && <NoCardsBanner />}
+        {!hasCard && <NoCardsBanner />}
         <div className="grid gap-4 grid-cols-4">
           {userCards?.map((card: any) => (
             <Link href={`/studio/edit/${card.id}`} className="group/card">

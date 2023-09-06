@@ -1,12 +1,10 @@
 import { NoCardsBanner } from "@/components/feedback/NoCardsBanner";
-import { Skeleton } from "@/components/ui/skeleton";
 import { getUserCards } from "@/server/card/getUserCards";
-import { Suspense } from "react";
 
 export default async function DashboardPage() {
-  const userCards = await getUserCards();
+  const userCard = await getUserCards();
 
-  const hasCards = userCards && userCards.length > 0;
+  const hasCard = userCard && userCard.length > 0;
 
   return (
     <>
@@ -17,7 +15,7 @@ export default async function DashboardPage() {
           </h1>
         </div>
       </div>
-      <div className="mt-10">{!hasCards && <NoCardsBanner />}</div>
+      <div className="mt-10">{!hasCard && <NoCardsBanner />}</div>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { getSingleCard } from "@/server/card/getSingleCard";
 import { StudioEditCardInner } from "./inner";
-import { CardsRecord } from "@/xata";
+import { CardRecord } from "@/xata";
 
 type StudioEditCardProps = {
   params: {
@@ -13,5 +13,5 @@ export default async function StudioEditCard({ params }: StudioEditCardProps) {
 
   if (!card) return <>No Card Found</>;
 
-  return <StudioEditCardInner card={card as CardsRecord} />;
+  return <StudioEditCardInner card={card as CardRecord} />;
 }

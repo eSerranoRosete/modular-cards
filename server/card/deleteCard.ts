@@ -20,7 +20,7 @@ export const deleteCard = async ({ cardID }: DeleteCardPayload) => {
 
   const xata = getXataClient();
 
-  const card = await xata.db.cards.filter({ id: cardID }).getFirst();
+  const card = await xata.db.card.filter({ id: cardID }).getFirst();
 
   if (!card) {
     return;

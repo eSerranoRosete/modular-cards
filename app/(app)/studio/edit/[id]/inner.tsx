@@ -1,12 +1,12 @@
 "use client";
 
-import { CardsRecord } from "@/xata";
+import { CardRecord } from "@/xata";
 
 import { CardProvider } from "@/context/card/CardProvider";
 import { CardEditor } from "@/components/editor/CardEditor";
 
 type StudioEditCardInnerProps = {
-  card: CardsRecord;
+  card: CardRecord;
 };
 
 export const StudioEditCardInner = ({ card }: StudioEditCardInnerProps) => {

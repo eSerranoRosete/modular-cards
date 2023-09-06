@@ -8,24 +8,25 @@ import type {
 
 const tables = [
   {
-    name: "users",
+    name: "user",
     columns: [
       { name: "password", type: "string" },
       { name: "email", type: "email", unique: true },
     ],
-    revLinks: [{ column: "user", table: "cards" }],
+    revLinks: [{ column: "user", table: "card" }],
   },
   {
-    name: "cards",
+    name: "card",
     columns: [
       { name: "title", type: "string" },
       { name: "description", type: "string" },
       { name: "organization", type: "string" },
-      { name: "user", type: "link", link: { table: "users" } },
+      { name: "user", type: "link", link: { table: "user" } },
       { name: "avatar", type: "file" },
       { name: "cover", type: "file" },
       { name: "email", type: "email" },
       { name: "phone", type: "string" },
+      { name: "settings", type: "json" },
     ],
   },
 ] as const;
@@ -33,15 +34,15 @@ const tables = [
 export type SchemaTables = typeof tables;
 export type InferredTypes = SchemaInference<SchemaTables>;
 
-export type Users = InferredTypes["users"];
-export type UsersRecord = Users & XataRecord;
+export type User = InferredTypes["user"];
+export type UserRecord = User & XataRecord;
 
-export type Cards = InferredTypes["cards"];
-export type CardsRecord = Cards & XataRecord;
+export type Card = InferredTypes["card"];
+export type CardRecord = Card & XataRecord;
 
 export type DatabaseSchema = {
-  users: UsersRecord;
-  cards: CardsRecord;
+  user: UserRecord;
+  card: CardRecord;
 };
 
 const DatabaseClient = buildClient();

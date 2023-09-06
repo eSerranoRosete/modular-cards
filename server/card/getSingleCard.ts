@@ -19,7 +19,7 @@ export const getSingleCard = async ({ cardID }: Props) => {
 
   const xata = getXataClient();
 
-  const card = await xata.db.cards.filter("id", cardID).getFirst();
+  const card = await xata.db.card.filter("id", cardID).getFirst();
 
   // Return null if no card is found
   if (!card) return null;
@@ -27,5 +27,5 @@ export const getSingleCard = async ({ cardID }: Props) => {
   // Return null if the card does not belong to the user
   if (card.user?.id !== id) return null;
 
-  return card;
+  return card.toSerializable();
 };

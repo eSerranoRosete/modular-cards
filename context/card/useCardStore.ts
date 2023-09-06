@@ -1,34 +1,39 @@
 import { createStore, useStore } from "zustand";
 import { createContext, useContext } from "react";
-import { CardsRecord } from "@/xata";
 
-export interface CardStoreProps
-  extends Omit<Partial<CardsRecord>, "avatar" | "cover" | "user"> {
+import { TCard } from "@/server/card/CardTypes";
+
+export interface CardStoreProps extends Partial<TCard> {
   avatar?: string;
   cover?: string;
+  settings?: CardSettings;
 }
 
 export interface StoreState extends CardStoreProps {}
 
-export interface CardStoreActions {
-  setID: (id: string) => void;
+type CardSettings = {
+  showContactButton?: boolean;
+};
 
-  setTitle: (title: string) => void;
-  setDescription: (description: string) => void;
-  setOrganization: (organization: string) => void;
+export interface CardStoreActions {
+  setID: (id: TCard["id"]) => void;
+
+  setTitle: (title: TCard["title"]) => void;
+  setDescription: (description: TCard["description"]) => void;
+  setOrganization: (organization: TCard["organization"]) => void;
   setAvatar: (avatar: string) => void;
   setCover: (cover: string) => void;
 
-  setPhone: (phone: string) => void;
-  setEmail: (email: string) => void;
+  setPhone: (phone: TCard["phone"]) => void;
+  setEmail: (email: TCard["email"]) => void;
+
+  setShowContactButton: (value?: boolean) => void;
 }
 
 export type Store = ReturnType<typeof createCardStore>;
 
 export const createCardStore = (initProps?: Partial<CardStoreProps>) => {
-  const DEFAULT_PROPS: CardStoreProps = {};
   return createStore<StoreState & CardStoreActions>()((set) => ({
-    ...DEFAULT_PROPS,
     ...initProps,
 
     setID: (id) => set({ id }),
@@ -41,6 +46,9 @@ export const createCardStore = (initProps?: Partial<CardStoreProps>) => {
 
     setPhone: (phone) => set({ phone }),
     setEmail: (email) => set({ email }),
+
+    setShowContactButton: (value) =>
+      set({ settings: { showContactButton: value } }),
   }));
 };
 
@@ -61,6 +69,7 @@ export const cardStoreState = () => {
     cover: s.cover,
     phone: s.phone,
     email: s.email,
+    settings: s.settings,
   }));
 
   return state;
@@ -81,6 +90,7 @@ export const cardStoreActions = () => {
     setCover: s.setCover,
     setPhone: s.setPhone,
     setEmail: s.setEmail,
+    setShowContactButton: s.setShowContactButton,
   }));
 
   return actions;

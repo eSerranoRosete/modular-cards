@@ -3,6 +3,7 @@
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,33 +14,37 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { useToast } from "@/components/ui/use-toast";
-
 import { cardStoreActions, cardStoreState } from "@/context/card/useCardStore";
+import { Switch } from "@/components/ui/switch";
+import { useMemo } from "react";
 
 export const TabContact = () => {
   const state = cardStoreState();
   const actions = cardStoreActions();
 
-  const { toast } = useToast();
-
   const formSchema = z.object({
     email: z.string().optional(),
     phone: z.string().optional(),
+    showContactButton: z.boolean().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: state.email || "",
-      phone: state.phone || "",
+      email: state.email as string,
+      phone: state.phone as string,
+      showContactButton: state.settings?.showContactButton,
     },
   });
 
-  form.watch((values) => {
-    if (values.email) actions.setEmail(values.email);
-    if (values.phone) actions.setPhone(values.phone);
-  });
+  useMemo(() => {
+    form.watch((v) => {
+      if (v.email) actions.setEmail(v.email);
+      if (v.phone) actions.setPhone(v.phone);
+
+      actions.setShowContactButton(v.showContactButton);
+    });
+  }, []);
 
   return (
     <div>
@@ -72,6 +77,27 @@ export const TabContact = () => {
                 <FormLabel>Contact Phone</FormLabel>
                 <FormControl>
                   <Input type="tel" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="showContactButton"
+            render={({ field }) => (
+              <FormItem className="flex mt-10 flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">Contact Button</FormLabel>
+                  <FormDescription>
+                    Receive emails about new products, features, and more.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    disabled={!state.email && !state.phone}
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
                 </FormControl>
               </FormItem>
             )}

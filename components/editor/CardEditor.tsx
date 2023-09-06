@@ -1,6 +1,6 @@
 "use client";
 
-import { cardStoreActions, cardStoreState } from "@/context/card/useCardStore";
+import { cardStoreState } from "@/context/card/useCardStore";
 import { EditorTab, useEditorStore } from "@/context/card/useEditorStore";
 import { cn } from "@/lib/utils";
 import { createCard } from "@/server/card/createCard";
@@ -74,19 +74,10 @@ export const CardEditor = () => {
       if (state.id) {
         await updateCard({
           ...state,
-          id: state.id,
-          base64Avatar: state.avatar,
-          base64Cover: state.cover,
         });
       } else {
-        let stateCopy = { ...state };
-
-        delete stateCopy.id;
-
         const id = await createCard({
-          ...stateCopy,
-          base64Avatar: state.avatar,
-          base64Cover: state.cover,
+          ...state,
         });
 
         router.push(`/studio/edit/${id}`);

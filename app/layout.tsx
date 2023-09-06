@@ -8,7 +8,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Inteminer Cards",
+  title: "Inteminer Card",
 };
 
 export default function RootLayout({

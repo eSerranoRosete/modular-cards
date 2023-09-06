@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   const { id } = token;
 
-  const cards = await xata.db.cards.filter("user.id", id).getMany();
+  const Card = await xata.db.Card.filter("user.id", id).getMany();
 
-  return NextResponse.json(cards);
+  return NextResponse.json(Card);
 }
