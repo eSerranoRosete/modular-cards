@@ -17,18 +17,25 @@ export const ProfileMenu = () => {
 
   if (!session) return <></>;
 
+  const avatarFallback = getAvatarFallback(session.data?.user.name || "");
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarFallback>ES</AvatarFallback>
+          <AvatarFallback>{avatarFallback}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
 
-        <div className="text-xs text-muted-foreground w-full px-2 mb-2">
-          {session.data?.user.email}
+        <div className="px-2 mt-1">
+          <div className="text-xs text-muted-foreground font-semibold w-full">
+            {session.data?.user.name}
+          </div>
+          <div className="text-xs text-muted-foreground w-full mb-2">
+            {session.data?.user.email}
+          </div>
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
@@ -44,4 +51,20 @@ export const ProfileMenu = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
+};
+
+export const getAvatarFallback = (name: string) => {
+  const [first, last] = name.split(" ");
+
+  if (first && last) {
+    return `${first[0]}${last[0]}`;
+  }
+
+  return first[0];
+};
+
+export const getFirstName = (name: string) => {
+  const [first] = name.split(" ");
+
+  return first;
 };

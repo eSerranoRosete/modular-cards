@@ -16,7 +16,7 @@ export const NoCardsBanner = () => {
         </h1>
         <h2>
           Get started by{" "}
-          <Link className="underline" href="/studio/create">
+          <Link className="underline" href="/dashboard/create">
             creating your first card
           </Link>
         </h2>

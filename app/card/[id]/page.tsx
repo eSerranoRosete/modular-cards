@@ -1,5 +1,5 @@
 import { getSingleCard } from "@/server/card/getSingleCard";
-import { DownloadIcon } from "lucide-react";
+import { DownloadIcon, Share2 } from "lucide-react";
 import { notFound } from "next/navigation";
 
 type CardPage = {
@@ -37,12 +37,10 @@ export default async function CardPage({ params }: CardPage) {
 
         <div className="relative pt-20 text-center">
           <div className="m-auto mb-5 w-5/6 p-3 text-slate-800">
-            <h4 className="text-2xl font-bold mb-2">{card.title as string}</h4>
-            <p className="m-auto mb-2 max-w-xs text-sm">
-              {card.description as string}
-            </p>
+            <h4 className="text-2xl font-bold mb-2">{card.title}</h4>
+            <p className="m-auto mb-2 max-w-xs text-sm">{card.description}</p>
             <div className="mb-4 flex items-center justify-center text-sm font-bold">
-              {card.organization as string}
+              {card.organization}
             </div>
             {card.settings?.showContactButton && (
               <a
@@ -52,6 +50,13 @@ export default async function CardPage({ params }: CardPage) {
               >
                 Añadir a contactos
                 <DownloadIcon className="w-5" />
+              </a>
+            )}
+
+            {card.settings?.showShareButton && (
+              <a className="m-auto mb-2 gap-2 flex items-center justify-center rounded-xl bg-slate-200 px-6 py-2 text-sm text-slate-900">
+                Compartir Tarjeta
+                <Share2 className="w-5" />
               </a>
             )}
           </div>

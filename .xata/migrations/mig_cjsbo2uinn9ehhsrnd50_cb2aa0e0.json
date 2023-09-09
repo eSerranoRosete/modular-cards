@@ -1,0 +1,18 @@
+{
+  "id": "mig_cjsbo2uinn9ehhsrnd50",
+  "parentID": "mig_cjsbnn7dta33bvce0tj0",
+  "checksum": "1:cb2aa0e0f0741d03e30bddc39947b4cf5a85679b6c953c1e3d5fe5810752b3ec",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "showContactButton",
+          "type": "bool",
+          "notNull": true,
+          "defaultValue": "true"
+        },
+        "table": "settings"
+      }
+    }
+  ]
+}

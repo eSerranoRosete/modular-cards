@@ -1,0 +1,13 @@
+{
+  "id": "mig_cjscq17dta33bvce12fg",
+  "parentID": "mig_cjscpvthb6e376l16sbg",
+  "checksum": "1:f7283f46a8b9ba91e17de8eba44f3997a396fdd62b81f97183fdffa8b20605d7",
+  "operations": [
+    {
+      "renameTable": {
+        "newName": "card",
+        "oldName": "cards"
+      }
+    }
+  ]
+}

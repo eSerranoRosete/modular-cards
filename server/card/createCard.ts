@@ -1,41 +1,34 @@
 "use server";
 
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import { Card, getXataClient } from "@/xata";
+import { getXataClient } from "@/xata";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
-import { CardStoreProps } from "@/context/card/useCardStore";
+import { CardType } from "./CardTypes";
+import { processBase64 } from "@/lib/processBase64";
 
-export const createCard = async (values: CardStoreProps) => {
+export const createCard = async (values: CardType): Promise<string | null> => {
   const session = await getServerSession(options);
 
   if (!session?.user) {
-    return;
+    return null;
   }
 
   const { id } = session.user;
 
   const xata = getXataClient();
 
-  const avatar = values.avatar?.split(",")[1];
-  const cover = values.cover?.split(",")[1];
+  const avatar = processBase64(values.avatar?.base64Content);
+  const cover = processBase64(values.cover?.base64Content);
 
   const card = await xata.db.card.create({
     ...values,
+
+    ...(avatar && { avatar }),
+    ...(cover && { cover }),
+
     user: { id },
-    ...(avatar && {
-      avatar: {
-        base64Content: avatar,
-        mediaType: "image/jpg",
-      },
-    }),
-    ...(cover && {
-      cover: {
-        base64Content: cover,
-        mediaType: "image/jpg",
-      },
-    }),
   });
 
   revalidatePath("/*");

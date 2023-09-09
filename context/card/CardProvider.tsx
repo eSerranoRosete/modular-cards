@@ -1,13 +1,10 @@
 "use client";
-import {
-  CardContext,
-  CardStoreProps,
-  createCardStore,
-} from "@/context/card/useCardStore";
+import { CardContext, createCardStore } from "@/context/card/useCardStore";
+import { CardType } from "@/server/card/CardTypes";
 import { useRef } from "react";
 
 type CardPropviderProps = {
-  state?: Partial<CardStoreProps>;
+  state?: CardType;
   children: React.ReactNode;
 };
 

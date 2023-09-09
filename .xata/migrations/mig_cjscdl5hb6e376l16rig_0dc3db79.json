@@ -1,0 +1,16 @@
+{
+  "id": "mig_cjscdl5hb6e376l16rig",
+  "parentID": "mig_cjscdjminn9ehhsrnf9g",
+  "checksum": "1:0dc3db79cb2801b8ca2e944412dcb4a69d68c83f92a31620fcd645b0a07cb1d9",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "settings",
+          "type": "json"
+        },
+        "table": "cards"
+      }
+    }
+  ]
+}

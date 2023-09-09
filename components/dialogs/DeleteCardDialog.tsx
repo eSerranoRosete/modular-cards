@@ -33,7 +33,7 @@ export function DeleteCardDialog({ cardID }: DeleteCardDialogProps) {
         description: "Your card has been deleted successfully.",
       });
 
-      router.push("/studio");
+      router.push("/dashboard");
     } catch (error: any) {
       toast({
         title: "Error",

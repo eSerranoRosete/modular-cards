@@ -1,39 +1,36 @@
 import { createStore, useStore } from "zustand";
 import { createContext, useContext } from "react";
+import { CardType } from "@/server/card/CardTypes";
 
-import { TCard } from "@/server/card/CardTypes";
-
-export interface CardStoreProps extends Partial<TCard> {
-  avatar?: string;
-  cover?: string;
-  settings?: CardSettings;
-}
+export interface CardStoreProps extends CardType {}
 
 export interface StoreState extends CardStoreProps {}
 
-type CardSettings = {
-  showContactButton?: boolean;
-};
+export interface StoreActions {
+  setID: (id: CardType["id"]) => void;
 
-export interface CardStoreActions {
-  setID: (id: TCard["id"]) => void;
+  setTitle: (title: CardType["title"]) => void;
+  setDescription: (description: CardType["description"]) => void;
+  setOrganization: (organization: CardType["organization"]) => void;
+  setAvatar: (avatar: CardType["avatar"]) => void;
+  setCover: (cover: CardType["cover"]) => void;
 
-  setTitle: (title: TCard["title"]) => void;
-  setDescription: (description: TCard["description"]) => void;
-  setOrganization: (organization: TCard["organization"]) => void;
-  setAvatar: (avatar: string) => void;
-  setCover: (cover: string) => void;
+  setPhone: (phone: CardType["phone"]) => void;
+  setEmail: (email: CardType["email"]) => void;
 
-  setPhone: (phone: TCard["phone"]) => void;
-  setEmail: (email: TCard["email"]) => void;
+  setSettings: (settings: CardType["settings"]) => void;
 
-  setShowContactButton: (value?: boolean) => void;
+  setSocial: (social: CardType["social"]) => void;
 }
 
 export type Store = ReturnType<typeof createCardStore>;
 
 export const createCardStore = (initProps?: Partial<CardStoreProps>) => {
-  return createStore<StoreState & CardStoreActions>()((set) => ({
+  const DEFAULT_PROPS: CardStoreProps = {
+    social: [],
+  };
+  return createStore<StoreState & StoreActions>()((set, get) => ({
+    ...DEFAULT_PROPS,
     ...initProps,
 
     setID: (id) => set({ id }),
@@ -47,20 +44,24 @@ export const createCardStore = (initProps?: Partial<CardStoreProps>) => {
     setPhone: (phone) => set({ phone }),
     setEmail: (email) => set({ email }),
 
-    setShowContactButton: (value) =>
-      set({ settings: { showContactButton: value } }),
+    setSettings: (settings) => {
+      const { settings: currentSettings } = get();
+      return set({ settings: { ...currentSettings, ...settings } });
+    },
+
+    setSocial: (social) => set({ social }),
   }));
 };
 
 export const CardContext = createContext<Store | null>(null);
 
-export const cardStoreState = () => {
+export const useCardStore = () => {
   const context = useContext(CardContext);
 
   if (!context)
     throw new Error("useCardStore must be used within a CardProvider");
 
-  const state = useStore(context, (s) => ({
+  const state: StoreState = useStore(context, (s) => ({
     id: s.id,
     title: s.title,
     description: s.description,
@@ -70,18 +71,10 @@ export const cardStoreState = () => {
     phone: s.phone,
     email: s.email,
     settings: s.settings,
+    social: s.social,
   }));
 
-  return state;
-};
-
-export const cardStoreActions = () => {
-  const context = useContext(CardContext);
-
-  if (!context)
-    throw new Error("useCardStore must be used within a CardProvider");
-
-  const actions = useStore(context, (s) => ({
+  const actions: StoreActions = useStore(context, (s) => ({
     setID: s.setID,
     setTitle: s.setTitle,
     setDescription: s.setDescription,
@@ -90,8 +83,9 @@ export const cardStoreActions = () => {
     setCover: s.setCover,
     setPhone: s.setPhone,
     setEmail: s.setEmail,
-    setShowContactButton: s.setShowContactButton,
+    setSettings: s.setSettings,
+    setSocial: s.setSocial,
   }));
 
-  return actions;
+  return { state, actions };
 };

@@ -1,0 +1,13 @@
+{
+  "id": "mig_cjscpvthb6e376l16sbg",
+  "parentID": "mig_cjscdl5hb6e376l16rig",
+  "checksum": "1:b229abe78d6c76e84290a7e91f0b7e8dd005bf50bb2ecf68a9a593ce0f6a13dd",
+  "operations": [
+    {
+      "renameTable": {
+        "newName": "user",
+        "oldName": "users"
+      }
+    }
+  ]
+}

@@ -26,7 +26,7 @@ export const options: AuthOptions = {
         // You can also use the `req` object to obtain additional parameters
         // (i.e., the request IP address)
 
-        const user = await xata.db.users
+        const user = await xata.db.user
           .filter("email", credentials?.username)
           .getFirst();
 

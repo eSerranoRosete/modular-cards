@@ -5,18 +5,14 @@ import { getXataClient } from "@/xata";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
-import { CardStoreProps } from "@/context/card/useCardStore";
+import { CardType } from "./CardTypes";
+import { processBase64 } from "@/lib/processBase64";
 
-// interface UpdateCardPayload extends Omit<Card, "user" | "avatar" | "cover"> {
-//   base64Avatar?: string;
-//   base64Cover?: string;
-// }
-
-export const updateCard = async (values: CardStoreProps) => {
+export const updateCard = async (values: CardType): Promise<string | null> => {
   const session = await getServerSession(options);
 
   if (!session?.user) {
-    return;
+    return null;
   }
 
   const user = session.user;
@@ -33,26 +29,26 @@ export const updateCard = async (values: CardStoreProps) => {
     throw new Error("You don't have permission to update this card");
   }
 
-  const avatar = values.avatar?.split("data:image/png;base64,")[1];
-  const cover = values.cover?.split("data:image/png;base64,")[1];
+  const avatar = processBase64(values.avatar?.base64Content);
+  const cover = processBase64(values.cover?.base64Content);
+
+  console.log("avatar", values.avatar);
+  console.log("cover", values.cover);
 
   const card = await xata.db.card.update(currentCard.id, {
     ...values,
-    ...(avatar && {
-      avatar: {
-        base64Content: avatar,
-        mediaType: "image/jpg",
-      },
-    }),
-    ...(cover && {
-      cover: {
-        base64Content: cover,
-        mediaType: "image/jpg",
-      },
-    }),
+
+    ...(avatar && { avatar }),
+    ...(cover && { cover }),
+
+    id: currentCard.id,
   });
+
+  if (!card) {
+    return null;
+  }
 
   revalidatePath("/*");
 
-  return card?.id;
+  return card.id;
 };

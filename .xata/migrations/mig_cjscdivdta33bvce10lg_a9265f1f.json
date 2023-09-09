@@ -1,0 +1,13 @@
+{
+  "id": "mig_cjscdivdta33bvce10lg",
+  "parentID": "mig_cjsbo2uinn9ehhsrnd50",
+  "checksum": "1:a9265f1f2a0250817f3d3e28094552fcb3cc5dd22065fe885133ff9a257c4244",
+  "operations": [
+    {
+      "removeColumn": {
+        "column": "settings",
+        "table": "cards"
+      }
+    }
+  ]
+}

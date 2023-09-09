@@ -6,6 +6,7 @@ import { hash } from "bcrypt";
 type User = {
   email: string;
   password: string;
+  name: string;
 };
 
 const xata = getXataClient();
@@ -18,11 +19,12 @@ type Response = {
 export const createUser = async ({
   email,
   password,
+  name,
 }: User): Promise<Response> => {
   try {
     const hashed = await hash(password, 10);
 
-    const user = await xata.db.users.create({ email, password: hashed });
+    const user = await xata.db.user.create({ email, password: hashed, name });
 
     return {
       userID: user.id,

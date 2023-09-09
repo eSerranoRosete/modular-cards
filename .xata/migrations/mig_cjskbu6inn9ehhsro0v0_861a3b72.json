@@ -1,0 +1,16 @@
+{
+  "id": "mig_cjskbu6inn9ehhsro0v0",
+  "parentID": "mig_cjsft6uinn9ehhsrnof0",
+  "checksum": "1:861a3b72f95157628c56854afd9ba42e165164a22229184c8f38c73beef96f9d",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "social",
+          "type": "json"
+        },
+        "table": "card"
+      }
+    }
+  ]
+}

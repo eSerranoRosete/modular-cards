@@ -1,7 +1,5 @@
 "use client";
 
-import { cardStoreState } from "@/context/card/useCardStore";
-import { EditorTab, useEditorStore } from "@/context/card/useEditorStore";
 import { cn } from "@/lib/utils";
 import { createCard } from "@/server/card/createCard";
 import { updateCard } from "@/server/card/updateCard";
@@ -16,7 +14,7 @@ import {
   Save,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CardTemplate } from "../card/CardTemplate";
 import { AppButton } from "../ui/app-button";
 import { Button, buttonVariants } from "../ui/button";
@@ -27,6 +25,9 @@ import { TabModules } from "./Tabs/TabModules";
 import { TabSettings } from "./Tabs/TabSettings";
 import { TabSocial } from "./Tabs/TabSocial";
 import { useRouter } from "next/navigation";
+import { useCardStore } from "@/context/card/useCardStore";
+import { EditorTab, useEditorNav } from "@/context/card/useEditorNav";
+import { CardViewport } from "../card/CardViewport";
 
 type ToolbarItem = {
   tab: EditorTab;
@@ -57,17 +58,11 @@ const toolbarItems: ToolbarItem[] = [
 ];
 
 export const CardEditor = () => {
-  const state = cardStoreState();
-
+  const { state } = useCardStore();
   const router = useRouter();
-
   const [pending, setPending] = useState(false);
 
-  const store = useEditorStore((s) => ({ ...s }));
-
-  useEffect(() => {
-    store.setActiveTab("basic");
-  }, []);
+  const { tab, setTab } = useEditorNav();
 
   const onSave = async () => {
     try {
@@ -80,7 +75,7 @@ export const CardEditor = () => {
           ...state,
         });
 
-        router.push(`/studio/edit/${id}`);
+        router.push(`/dashboard/edit/${id}`);
       }
 
       toast({
@@ -105,10 +100,10 @@ export const CardEditor = () => {
     <div>
       <div className="flex mt-5 space-x-2 items-center">
         <div className="grow flex space-x-2 items-baseline">
-          <Link href="/studio">
+          <Link href="/dashboard">
             <h1 className="text-2xl flex items-baseline gap-2 font-medium underline">
               <ChevronLeft className="self-center" />
-              <span>Studio</span>
+              <span>Dashboard</span>
             </h1>
           </Link>
           <h5 className="text-muted-foreground">/ Editor</h5>
@@ -128,27 +123,25 @@ export const CardEditor = () => {
         )}
       </div>
       <section className="grid mt-10 gap-8 grid-cols-2 w-full">
-        <div className="h-full flex gap-5">
+        <div className="h-screen flex gap-5 max-h-[700px] overflow-clip">
           <div className="p-2 pr-4 w-fit rounded-md rouned-md grid content-start gap-4 border-r border-border h-full">
             {toolbarItems.map((item) => (
               <Button
                 key={item.tab}
                 size="icon"
-                variant={store.activeTab === item.tab ? "default" : "secondary"}
-                onClick={() => store.setActiveTab(item.tab)}
+                variant={tab === item.tab ? "default" : "secondary"}
+                onClick={() => setTab(item.tab)}
               >
                 {item.icon}
               </Button>
             ))}
           </div>
           <div className="w-full h-full relative">
-            {store.activeTab === "basic" && <TabBasic />}
-            {store.activeTab === "contact" && <TabContact />}
-            {store.activeTab === "modules" && <TabModules />}
-            {store.activeTab === "settings" && (
-              <TabSettings cardID={state.id} />
-            )}
-            {store.activeTab === "social" && <TabSocial />}
+            {tab === "basic" && <TabBasic />}
+            {tab === "contact" && <TabContact />}
+            {tab === "modules" && <TabModules />}
+            {tab === "settings" && <TabSettings cardID={state.id} />}
+            {tab === "social" && <TabSocial />}
             <AppButton
               className="float-right mt-4 absolute bottom-2 right-2"
               size="sm"
@@ -164,9 +157,9 @@ export const CardEditor = () => {
             </AppButton>
           </div>
         </div>
-        <div className="h-full p-10 bg-muted/50">
+        <CardViewport>
           <CardTemplate />
-        </div>
+        </CardViewport>
       </section>
     </div>
   );

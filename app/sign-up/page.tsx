@@ -40,6 +40,9 @@ export default function SignUp() {
     password: z.string().min(8, {
       message: "Password must be at least 8 characters.",
     }),
+    name: z.string().min(2, {
+      message: "Name must be at least 2 characters.",
+    }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,6 +50,7 @@ export default function SignUp() {
     defaultValues: {
       email: "",
       password: "",
+      name: "",
     },
   });
 
@@ -54,6 +58,7 @@ export default function SignUp() {
     const res = await createUser({
       email: values.email,
       password: values.password,
+      name: values.name,
     });
 
     if (res.error) {
@@ -72,12 +77,25 @@ export default function SignUp() {
         <CardHeader className="text-center">
           <CardTitle>Create an account</CardTitle>
           <CardDescription>
-            Enter your email below to create your account
+            Enter your information below to create your account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"

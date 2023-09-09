@@ -7,16 +7,24 @@ import { buttonVariants } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { usePathname } from "next/navigation";
 import { ProfileMenu } from "../ProfileMenu";
-import { SessionProvider } from "next-auth/react";
+import { Lock } from "lucide-react";
 
-const navItems = [
+type IFNavItem = {
+  label: string;
+  path: string;
+  disabled?: boolean;
+  isActive?: boolean;
+};
+
+const navItems: IFNavItem[] = [
   {
     label: "Dashboard",
     path: "/dashboard",
   },
   {
-    label: "Studio",
-    path: "/studio",
+    label: "Analytics",
+    path: "/analytics",
+    disabled: true,
   },
 ];
 
@@ -54,26 +62,19 @@ export const AppBar = () => {
               label={item.label}
               path={item.path}
               isActive={pathname.startsWith(item.path)}
+              disabled={item.disabled}
             />
           ))}
         </div>
 
-        <SessionProvider>
-          <ProfileMenu />
-        </SessionProvider>
+        <ProfileMenu />
       </nav>
       <Separator />
     </div>
   );
 };
 
-type NavItemProps = {
-  isActive?: boolean;
-  label: string;
-  path: string;
-};
-
-export const NavItem = ({ isActive, label, path }: NavItemProps) => {
+export const NavItem = ({ isActive, label, path, disabled }: IFNavItem) => {
   return (
     <Link
       href={path}
@@ -82,11 +83,14 @@ export const NavItem = ({ isActive, label, path }: NavItemProps) => {
           size: "sm",
           variant: "ghost",
         }),
-        isActive && "bg-primary text-white hover:bg-primary hover:text-white",
-        "transition-none"
+        isActive &&
+          "bg-foreground text-white hover:bg-foreground hover:text-white",
+        disabled && "pointer-events-none text-muted-foreground",
+        "transition-none relative gap-1"
       )}
     >
       {label}
+      {disabled && <Lock className="w-3" />}
     </Link>
   );
 };

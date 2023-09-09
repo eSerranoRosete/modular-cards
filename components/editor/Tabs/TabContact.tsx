@@ -10,41 +10,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 
-import { cardStoreActions, cardStoreState } from "@/context/card/useCardStore";
+import { useCardStore } from "@/context/card/useCardStore";
 import { Switch } from "@/components/ui/switch";
-import { useMemo } from "react";
 
 export const TabContact = () => {
-  const state = cardStoreState();
-  const actions = cardStoreActions();
+  const { state, actions } = useCardStore();
 
-  const formSchema = z.object({
-    email: z.string().optional(),
-    phone: z.string().optional(),
-    showContactButton: z.boolean().optional(),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
     defaultValues: {
-      email: state.email as string,
-      phone: state.phone as string,
+      email: state.email,
+      phone: state.phone,
       showContactButton: state.settings?.showContactButton,
+      showShareButton: state.settings?.showShareButton,
     },
   });
-
-  useMemo(() => {
-    form.watch((v) => {
-      if (v.email) actions.setEmail(v.email);
-      if (v.phone) actions.setPhone(v.phone);
-
-      actions.setShowContactButton(v.showContactButton);
-    });
-  }, []);
 
   return (
     <div>
@@ -55,7 +36,7 @@ export const TabContact = () => {
         </p>
       </div>
       <Form {...form}>
-        <form className="w-full max-w-md grid gap-3">
+        <form className="w-full grid gap-3">
           <FormField
             control={form.control}
             name="email"
@@ -63,7 +44,13 @@ export const TabContact = () => {
               <FormItem>
                 <FormLabel>Contact Email</FormLabel>
                 <FormControl>
-                  <Input type="email" {...field} />
+                  <Input
+                    onChangeCapture={(e) =>
+                      actions.setEmail(e.currentTarget.value)
+                    }
+                    type="email"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -76,7 +63,13 @@ export const TabContact = () => {
               <FormItem>
                 <FormLabel>Contact Phone</FormLabel>
                 <FormControl>
-                  <Input type="tel" {...field} />
+                  <Input
+                    type="tel"
+                    onChangeCapture={(e) =>
+                      actions.setPhone(e.currentTarget.value)
+                    }
+                    {...field}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -89,14 +82,40 @@ export const TabContact = () => {
                 <div className="space-y-0.5">
                   <FormLabel className="text-base">Contact Button</FormLabel>
                   <FormDescription>
-                    Receive emails about new products, features, and more.
+                    Show or hide the contact button on your card.
                   </FormDescription>
                 </div>
                 <FormControl>
                   <Switch
                     disabled={!state.email && !state.phone}
                     checked={field.value}
-                    onCheckedChange={field.onChange}
+                    onCheckedChange={(value) => {
+                      field.onChange(value);
+                      actions.setSettings({ showContactButton: value });
+                    }}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="showShareButton"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">Share Button</FormLabel>
+                  <FormDescription>
+                    Show or hide the share button on your card.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={(value) => {
+                      field.onChange(value);
+                      actions.setSettings({ showShareButton: value });
+                    }}
                   />
                 </FormControl>
               </FormItem>

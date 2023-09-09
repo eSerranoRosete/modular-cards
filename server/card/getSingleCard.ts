@@ -3,16 +3,19 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { getXataClient } from "@/xata";
 import { getServerSession } from "next-auth";
+import { CardType } from "./CardTypes";
 
 type Props = {
   cardID: string;
 };
 
-export const getSingleCard = async ({ cardID }: Props) => {
+export const getSingleCard = async ({
+  cardID,
+}: Props): Promise<CardType | null> => {
   const session = await getServerSession(options);
 
   if (!session?.user) {
-    return;
+    return null;
   }
 
   const { id } = session.user;
@@ -27,5 +30,5 @@ export const getSingleCard = async ({ cardID }: Props) => {
   // Return null if the card does not belong to the user
   if (card.user?.id !== id) return null;
 
-  return card.toSerializable();
+  return card.toSerializable() as CardType;
 };

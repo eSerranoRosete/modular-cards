@@ -1,0 +1,19 @@
+{
+  "id": "mig_cjs9ie7dta33bvce0hn0",
+  "parentID": "mig_cjs9ia7dta33bvce0hfg",
+  "checksum": "1:4338ab72ea53ef0fdd61e0305b6df93d1debbb72ef6e7ce80ca92b612d69da28",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "settings",
+          "type": "link",
+          "link": {
+            "table": "settings"
+          }
+        },
+        "table": "cards"
+      }
+    }
+  ]
+}

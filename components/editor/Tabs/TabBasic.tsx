@@ -9,41 +9,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 
-import { useContext } from "react";
-
-import { CardContext } from "@/context/card/useCardStore";
-import { useStore } from "zustand";
+import { useCardStore } from "@/context/card/useCardStore";
 
 export const TabBasic = () => {
-  const store = useContext(CardContext);
+  const { state, actions } = useCardStore();
 
-  if (!store) throw new Error("Missing CardContext.Provider in the tree");
-
-  const ctx = useStore(store, (s) => ({ ...s }));
-
-  const formSchema = z.object({
-    title: z.string().trim().min(1).nonempty(),
-    description: z.string().optional(),
-    organization: z.string().optional(),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
     defaultValues: {
-      title: ctx.title as string,
-      description: ctx.description as string,
-      organization: ctx.organization as string,
+      title: state.title,
+      description: state.description,
+      organization: state.organization,
     },
-  });
-
-  form.watch((values) => {
-    if (values.title) ctx.setTitle(values.title);
-    if (values.description) ctx.setDescription(values.description);
-    if (values.organization) ctx.setOrganization(values.organization);
   });
 
   return (
@@ -55,7 +33,7 @@ export const TabBasic = () => {
         </p>
       </div>
       <Form {...form}>
-        <form className="w-full max-w-md grid gap-3">
+        <form className="w-full grid gap-3">
           <FormField
             control={form.control}
             name="title"
@@ -63,7 +41,12 @@ export const TabBasic = () => {
               <FormItem>
                 <FormLabel>Display Title</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    onChangeCapture={(e) =>
+                      actions.setTitle(e.currentTarget.value)
+                    }
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -76,7 +59,12 @@ export const TabBasic = () => {
               <FormItem>
                 <FormLabel>Display Subtitle</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    onChangeCapture={(e) =>
+                      actions.setDescription(e.currentTarget.value)
+                    }
+                    {...field}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -88,7 +76,12 @@ export const TabBasic = () => {
               <FormItem>
                 <FormLabel>Organization</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input
+                    onChangeCapture={(e) =>
+                      actions.setOrganization(e.currentTarget.value)
+                    }
+                    {...field}
+                  />
                 </FormControl>
               </FormItem>
             )}

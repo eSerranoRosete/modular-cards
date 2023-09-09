@@ -3,7 +3,7 @@
 import { CardEditor } from "@/components/editor/CardEditor";
 import { CardProvider } from "@/context/card/CardProvider";
 
-export default function StudioCreatePage() {
+export default function dashboardCreatePage() {
   return (
     <CardProvider>
       <CardEditor />

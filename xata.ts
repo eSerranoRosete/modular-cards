@@ -12,6 +12,7 @@ const tables = [
     columns: [
       { name: "password", type: "string" },
       { name: "email", type: "email", unique: true },
+      { name: "name", type: "string", notNull: true, defaultValue: "default" },
     ],
     revLinks: [{ column: "user", table: "card" }],
   },
@@ -27,6 +28,7 @@ const tables = [
       { name: "email", type: "email" },
       { name: "phone", type: "string" },
       { name: "settings", type: "json" },
+      { name: "social", type: "json" },
     ],
   },
 ] as const;
